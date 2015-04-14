@@ -1,25 +1,30 @@
 (function () {
 
-  var conn = new WebSocket('ws://localhost:4000');
+  var conn = new WebSocket('ws://10.10.45.39:4000');
 
-  conn.onopen = function () {
-    conn.send('Hello there!');
-  };
-
-  var form = $('form');
-  var msg = $('[name=msg]');
+  var teamA = $('#team-a');
+  var teamAScore = teamA.find('.score');
+  var teamBScore = $('#team-b').find('.score');
+  var body = $(document.body);
 
   conn.onmessage = function (messageObject) {
-    var p = $('<p>');
-    p.text(messageObject.data);
-    p.insertBefore(form);
+    var data = JSON.parse(messageObject.data);
+    if (data.type === 'team') {
+      $('#team-name').text(data.team);
+    } else if (data.type === 'scores') {
+      teamAScore.text(data.scores.A);
+      teamBScore.text(data.scores.B);
+    } else if (data.type === 'end') {
+      var winner = $('<div>');
+      winner.addClass('winner').text('Team ' + data.winner + ' wins!');
+      body.prepend(winner);
+    }
   };
 
-  form.on('submit', function () {
-    var message = msg.val();
-    conn.send(message);
-    msg.val('');
-    return false;
-  });
+  conn.onopen = function () {
+    body.on('click', function () {
+      conn.send('click');
+    });
+  };
 
 })();

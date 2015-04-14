@@ -5,13 +5,20 @@
     <title>Socket to 'Em</title>
     <style>
         body { background: grey;}
+        .winner { font-size: 6em; color: fuchsia; }
     </style>
 </head>
 <body>
-<form>
-    <input name="msg" />
-    <button>Send</button>
-</form>
+<h1>Socket to 'Em</h1>
+<p>You're on team <span id="team-name">...</span></p>
+<div id="team-a">
+    <h2>Team A</h2>
+    <div class="score">0</div>
+</div>
+<div id="team-b">
+    <h2>Team B</h2>
+    <div class="score">0</div>
+</div>
 <script src="/jquery/dist/jquery.js"></script>
 <script src="/client.js"></script>
 </body>
