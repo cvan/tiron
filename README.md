@@ -11,3 +11,7 @@ npm install && bower install
 ```
 node run
 ```
+
+## Note
+
+Presently the IP address of the server is hardcoded in client.js.

@@ -1,6 +1,6 @@
 (function () {
 
-  var conn = new WebSocket('ws://10.10.45.39:4000');
+  var conn = new WebSocket('ws://localhost:4000');
 
   var teamA = $('#team-a');
   var teamAScore = teamA.find('.score');
