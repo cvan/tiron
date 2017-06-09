@@ -81,7 +81,7 @@
 
   var winnerEl = document.createElement('div');
   winnerEl.id = 'winner';
-  winnerEl.className = 'winner';
+  winnerEl.className = 'winner hidden';
   document.body.appendChild(winnerEl);
 
   function loadTeam () {
@@ -104,7 +104,7 @@
 
   loadTeam();
 
-  var maxScore = 50;
+  var gameOver = false;
 
   conn.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
@@ -129,24 +129,68 @@
       teamBScoreEl.textContent = data.scores.B;
 
     } else if (type === 'end') {
+      gameOver = true;
+      document.documentElement.setAttribute('data-gg', data.winner);
+
+      winnerEl.classList.remove('hidden');
       winnerEl.setAttribute('data-team', data.winner);
       winnerEl.textContent = 'Team ' + data.winner + ' wins!';
+
     }
   };
 
+  function rematch () {
+    gameOver = false;
+    conn.send(JSON.stringify({type: 'rematch'}));
+    setTimeout(function () {
+      winnerEl.textContent = 'Rematch!';
+
+      setTimeout(function () {
+        winnerEl.classList.add('hidden');
+        winnerEl.textContent = '';
+      }, 1500);
+
+      document.documentElement.removeAttribute('data-gg');
+    }, 500);
+  }
+
   conn.onopen = function () {
+    if (!gameOver) {
+      conn.send(JSON.stringify({type: 'rematch'}));
+    }
+    console.log('open');
     window.addEventListener('click', function () {
       conn.send(JSON.stringify({type: 'tug'}));
     });
   };
 
+  var clicksGG = 0;
+
   window.addEventListener('click', function (evt) {
-    if (!evt.target || !evt.target.closest || !evt.target.closest('a[href$="#reset"]')) {
+    if (!evt.target || !evt.target.closest) {
       return;
     }
-    evt.preventDefault();
-    evt.stopPropagation();
-    clearSavedData();
-    window.location.href = window.location.origin + window.location.pathname;
+
+    console.log(clicksGG);
+
+    if (gameOver) {
+      if (clicksGG >= 1) {
+        clicksGG = 0;
+        rematch();
+        evt.preventDefault();
+        evt.stopPropagation();
+        return;
+      }
+      clicksGG++;
+      return;
+    }
+    clicksGG = 0;
+
+    if (evt.target.closest('a[href$="#reset"]')) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      clearSavedData();
+      window.location.href = window.location.origin + window.location.pathname;
+    }
   });
 })();

@@ -50,9 +50,27 @@
       }
 
       .winner {
-        color: fuchsia;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        color: rgba(255,255,255,.8);
         font-size: 6em;
         font-weight: bold;
+        opacity: 1;
+        text-align: center;
+        text-shadow: 8px 10px 1px rgba(0,0,0,.2);
+        transition: .5s opacity ease-out;
+      }
+
+      .winner.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
       }
 
       .rope {
@@ -67,12 +85,24 @@
         transition: .5s width ease-in-out;
       }
 
-      [data-team="A"] {
+      html[data-team="A"] {
         background-color: #ffdfdf;
       }
 
-      [data-team="B"] {
+      html[data-team="B"] {
         background-color: #cdecff;
+      }
+
+      .winner {
+        background-color: rgba(17,17,17,.5);
+      }
+
+      html[data-gg="A"] .winner {
+        background-color: rgba(231,4,15,.5);
+      }
+
+      html[data-gg="B"] .winner {
+        background-color: rgba(0,68,158,.5);
       }
 
       .side-a {
@@ -96,6 +126,7 @@
     <p class="team">You&rsquo;re on team <span class="team-name" id="team-name">&hellip;</span></p>
     <div class="player" id="player">
     </div>
+    <div class="game" id="game"></div>
     <div class="rope" id="rope">
       <div class="side-a side" id="side-a">
         <span class="score-a score" id="score-a">0</span>

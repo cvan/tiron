@@ -27,10 +27,6 @@ server.broadcast = function (message) {
 };
 
 server.on('connection', function (client) {
-  if (gameOver) {
-    return;
-  }
-
   var clientId = ++clientIdCount;
   clients[clientId] = client;
 
@@ -62,15 +58,19 @@ server.on('connection', function (client) {
 
     scores[team] += increment;
     var diff = scores.A - scores.B;
-    console.log('diff', diff);
+    var score = Math.abs(diff);
 
-    if (Math.abs(diff) >= MAX_SCORE) {
+    if (score >= MAX_SCORE) {
       gameOver = true;
       var winner = {
         type: 'end',
-        winner: diff > 0 ? 'A' : 'B'
+        winner: diff > 0 ? 'A' : 'B',
+        score: score,
+        scores: scores
       };
       server.broadcast(JSON.stringify(winner));
+      scores.A = 0;
+      scores.B = 0;
     } else {
       var gameScores = {
         type: 'scores',
@@ -80,11 +80,14 @@ server.on('connection', function (client) {
     }
   }
 
-  client.on('message', function (msg) {
-    if (gameOver) {
-      return;
-    }
+  function rematch () {
+    scores.A = 0;
+    scores.B = 0;
+    gameOver = false;
+    tug(0);
+  }
 
+  client.on('message', function (msg) {
     var data;
     try {
       data = JSON.parse(msg);
@@ -100,7 +103,15 @@ server.on('connection', function (client) {
       case 'name':
         return name(data.name);
       case 'tug':
-        return tug(1);
+        if (!gameOver) {
+          tug(1);
+        }
+        break;
+      case 'rematch':
+        if (gameOver) {
+          rematch();
+        }
+        break;
     }
   });
 
