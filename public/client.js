@@ -68,6 +68,9 @@
   var currentPlayer = loadPlayer();
   var currentTeam = loadTeam();
 
+  var playerEl = document.querySelector('#player');
+  playerEl.textContent = currentPlayer;
+
   var teamASideEl = document.querySelector('#side-a');
   var teamBSideEl = document.querySelector('#side-b');
 
@@ -111,6 +114,7 @@
     var type = data.type;
 
     if (type === 'team') {
+      document.documentElement.setAttribute('data-team', data.team);
       teamNameEl.setAttribute('data-team', data.team);
       teamNameEl.textContent = data.team;
       saveTeam(data.team);

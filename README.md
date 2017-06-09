@@ -1,17 +1,26 @@
-# Socket to 'Em
+# Tug o' War
 
-## Setup
 
+## Play!
+
+**Follow me!**
+
+
+## Development
+
+### Installation
+
+```sh
+npm install
 ```
-npm install && bower install
+
+### Usage
+
+```sh
+npm start
 ```
 
-## Run
 
-```
-node run
-```
+## License
 
-## Note
-
-Presently the IP address of the server is hardcoded in client.js.
+All code and content is provided under a CC0-1.0 (Public Domain) license.

@@ -18,6 +18,12 @@
 
       html {
         font-size: 14px;
+        -webkit-touch-callout: none;  /* iOS Safari */
+        -webkit-user-select: none;  /* Safari */
+        -khtml-user-select: none;  /* Konqueror HTML */
+        -moz-user-select: none;  /* Firefox */
+        -ms-user-select: none;  /* IE/Edge */
+        user-select: none;  /* Non-prefixed version; currently supported by Chrome and Opera */
       }
 
       body {
@@ -26,12 +32,21 @@
         position: relative;
       }
 
+      .title {
+        display: none;
+      }
+
       .reset {
         bottom: 3rem;
         color: #999;
         opacity: .2;
         position: absolute;
         right: 3rem;
+      }
+
+      .player {
+        font-size: 1.5rem;
+        font-weight: bold;
       }
 
       .winner {
@@ -46,26 +61,40 @@
         margin: 3rem 0;
       }
 
-      .score {
+      .side {
         flex: 1;
-        padding: .5rem;
+        padding: 1rem 1.5rem;
         transition: .5s width ease-in-out;
       }
 
-      .score-a {
+      [data-team="A"] {
+        background-color: #ffdfdf;
+      }
+
+      [data-team="B"] {
+        background-color: #cdecff;
+      }
+
+      .side-a {
         background-color: #e7040f;
       }
 
-      .score-b {
+      .side-b {
         background-color: #00449e;
         text-align: right;
+      }
+
+      .score {
+        color: rgba(255,255,255,.8);
+        font-size: 2rem;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
     <h1 class="title">Tug o&rsquo; War</h1>
     <p class="team">You&rsquo;re on team <span class="team-name" id="team-name">&hellip;</span></p>
-    <div class="team-a" id="team-a">
+    <div class="player" id="player">
     </div>
     <div class="rope" id="rope">
       <div class="side-a side" id="side-a">
@@ -86,7 +115,6 @@
     </div>
     -->
     <a class="reset" id="reset" href="#reset">Start over</a>
-    <script src="/jquery/dist/jquery.js"></script>
     <script src="/client.js"></script>
   </body>
 </html>

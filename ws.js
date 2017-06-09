@@ -62,6 +62,7 @@ server.on('connection', function (client) {
 
     scores[team] += increment;
     var diff = scores.A - scores.B;
+    console.log('diff', diff);
 
     if (Math.abs(diff) >= MAX_SCORE) {
       gameOver = true;
