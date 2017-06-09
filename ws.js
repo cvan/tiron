@@ -1,9 +1,11 @@
 var ws = require('ws');
 
-var server = new ws.Server({port: 4000});
+var port = process.env.WS_PORT || 4000;
+
+var server = new ws.Server({port: port});
 var gameOver = false;
 var clients = {};
-var clientIdSequence = 0;
+var clientIdCount = 0;
 var teams = {
   A: [],
   B: []
@@ -12,6 +14,7 @@ var scores = {
   A: 0,
   B: 0
 };
+var MAX_SCORE = 20;  // Number of tugs.
 
 server.broadcast = function (message) {
   this.clients.forEach(function (client) {
@@ -24,8 +27,11 @@ server.broadcast = function (message) {
 };
 
 server.on('connection', function (client) {
-  if (gameOver) return;
-  var clientId = ++clientIdSequence;
+  if (gameOver) {
+    return;
+  }
+
+  var clientId = ++clientIdCount;
   clients[clientId] = client;
 
   var team;
@@ -47,25 +53,53 @@ server.on('connection', function (client) {
     delete clients[clientId];
   });
 
-  client.on('message', function (message) {
-    if (!gameOver && message === 'click') {
-      console.log('Client ' + clientId + ' clicked!');
-      scores[team] += 1;
-      var diff = scores.A - scores.B;
-      if (Math.abs(diff) >= 100) {
-        gameOver = true;
-        var winner = {
-          type: 'end',
-          winner: diff > 0 ? 'A' : 'B'
-        };
-        server.broadcast(JSON.stringify(winner));
-      } else {
-        var gameScores = {
-          type: 'scores',
-          scores: scores
-        };
-        server.broadcast(JSON.stringify(gameScores));
-      }
+  function name () {
+    playerName = playerName;
+  }
+
+  function tug (increment) {
+    console.log('Client ' + clientId + ' tugged!');
+
+    scores[team] += increment;
+    var diff = scores.A - scores.B;
+
+    if (Math.abs(diff) >= MAX_SCORE) {
+      gameOver = true;
+      var winner = {
+        type: 'end',
+        winner: diff > 0 ? 'A' : 'B'
+      };
+      server.broadcast(JSON.stringify(winner));
+    } else {
+      var gameScores = {
+        type: 'scores',
+        scores: scores
+      };
+      server.broadcast(JSON.stringify(gameScores));
+    }
+  }
+
+  client.on('message', function (msg) {
+    if (gameOver) {
+      return;
+    }
+
+    var data;
+    try {
+      data = JSON.parse(msg);
+    } catch (e) {
+    }
+    if (!data) {
+      return;
+    }
+
+    var type = data.type;
+
+    switch (type) {
+      case 'name':
+        return name(data.name);
+      case 'tug':
+        return tug(1);
     }
   });
 
@@ -76,4 +110,5 @@ server.on('connection', function (client) {
 
   client.send(JSON.stringify(teamAssignment));
 
+  tug(0);
 });

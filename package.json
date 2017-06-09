@@ -1,12 +1,21 @@
 {
-  "name": "tug-sockets",
+  "name": "tugowar",
+  "description": "Tug o' War",
+  "license": "CC0-1.0",
   "version": "1.0.0",
-  "private": true,
+  "main": "run.js",
+  "repository": "cvan/tugowar",
   "dependencies": {
     "express": "^4.12.3",
     "ws": "^0.7.1"
   },
   "devDependencies": {
-    "bower": "^1.4.1"
+    "bower": "^1.4.1",
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "nodemon run.js",
+    "prod": "node run.js"
   }
 }
