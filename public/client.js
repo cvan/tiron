@@ -79,6 +79,8 @@
 
   var teamNameEl = document.querySelector('#team-name');
 
+  var pinataEl = document.querySelector('#pinata');
+
   var winnerEl = document.createElement('div');
   winnerEl.id = 'winner';
   winnerEl.className = 'winner hidden';
@@ -105,6 +107,10 @@
   loadTeam();
 
   var gameOver = false;
+  var scores = {
+    A: 0,
+    B: 0
+  };
 
   conn.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
@@ -120,6 +126,12 @@
       saveTeam(data.team);
 
     } else if (type === 'scores') {
+      scores = data.scores;
+
+      console.log(Math.abs(scores.B - scores.A));
+      // pinataEl.style.cssText += 'margin-right: calc(50% - 160px)';
+      pinataEl.style.cssText += 'margin-right: calc(' + (50 + Math.abs(scores.B - scores.A) * 2) + '% - 160px)';
+
       teamASideEl.setAttribute('style', 'flex: ' + data.scores.A);
       teamAScoreEl.setAttribute('data-score', data.scores.A);
       teamAScoreEl.textContent = data.scores.A;

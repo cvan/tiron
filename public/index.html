@@ -17,6 +17,7 @@
       }
 
       html {
+        background-color: #27c787;
         font-size: 14px;
         -webkit-touch-callout: none;  /* iOS Safari */
         -webkit-user-select: none;  /* Safari */
@@ -28,7 +29,7 @@
 
       body {
         font: 1rem/1.3 Helvetica Neue, Helvetica, Arial, sans-serif;
-        padding: 3rem;
+        /*padding: 3rem;*/
         position: relative;
       }
 
@@ -45,8 +46,22 @@
       }
 
       .player {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
         font-weight: bold;
+      }
+
+      .team {
+        opacity: .5;
+      }
+
+      html[data-team="B"] .header .header-inner {
+        float: right;
+      }
+
+      html[data-team="B"] .header .header-inner:after {
+        clear: both;
+        content: "";
+        display: block;
       }
 
       .winner {
@@ -68,12 +83,12 @@
       }
 
       .winner.hidden {
+        pointer-events: none;
         opacity: 0;
         visibility: hidden;
-        pointer-events: none;
       }
 
-      .rope {
+      .string {
         background: red;
         display: flex;
         margin: 3rem 0;
@@ -85,12 +100,23 @@
         transition: .5s width ease-in-out;
       }
 
+      .header {
+        padding: 2rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+      }
+
       html[data-team="A"] {
-        background-color: #ffdfdf;
+        /*background-color: #ffdfdf;*/
+        color: #e7040f;
       }
 
       html[data-team="B"] {
-        background-color: #cdecff;
+        /*background-color: #cdecff;*/
+        color: #00449e;
       }
 
       .winner {
@@ -114,20 +140,299 @@
         text-align: right;
       }
 
+      .string {
+        display: none;
+      }
+
+      html[data-debug="true"] .string {
+        display: block;
+      }
+
       .score {
         color: rgba(255,255,255,.8);
         font-size: 2rem;
         font-weight: bold;
       }
+
+.wrap {
+  background-color: #dbf1ff;
+  padding-top: 100px;
+}
+.pinata-wrap {
+  display: block;
+  margin: auto;
+  padding-top: 109px;
+  padding-left: 99px;
+  width: 320px;
+  position: relative;
+  animation: wrap 5s infinite ease-in-out;
+}
+.propeller-wrap {
+  position: absolute;
+  top: 0;
+  width: 172px;
+  height: 12px;
+  border-radius: 4px;
+  margin-top: 13px;
+}
+.propeller-wrap:before,
+.propeller-wrap:after {
+  content: "";
+  position: absolute;
+}
+.propeller-wrap:before {
+  bottom: -8px;
+  width: 37px;
+  height: 28px;
+  border-radius: 19px;
+}
+.propeller-wrap:after {
+  width: 16px;
+  height: 8px;
+  top: -12px;
+  border-radius: 5px;
+}
+.propeller-wrap--first {
+  background-color: #2e9d6d;
+  left: 12px;
+}
+.propeller-wrap--first:before,
+.propeller-wrap--first:after {
+  background-color: #2e9d6d;
+}
+.propeller-wrap--first:before {
+  left: 72px;
+}
+.propeller-wrap--first:after {
+  left: 82px;
+}
+.propeller-wrap--second {
+  background-color: #27c787;
+  left: 40px;
+}
+.propeller-wrap--second:before,
+.propeller-wrap--second:after {
+  background-color: #27c787;
+}
+.propeller-wrap--second:before {
+  left: 51px;
+}
+.propeller-wrap--second:after {
+  left: 61px;
+}
+.propeller {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 5px;
+  width: 52px;
+  height: 6px;
+}
+.propeller:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -2px;
+  width: 4px;
+  height: 5px;
+}
+.propeller-wrap--first .propeller:before {
+  background-color: #2e9d6d;
+}
+.propeller-wrap--second .propeller:before {
+  background-color: #27c787;
+}
+.propeller-blade {
+  border-radius: 3.5px;
+  animation: propellers 0.25s infinite linear;
+  width: 100%;
+  height: 100%;
+}
+.propeller-wrap--first .propeller-blade {
+  background-color: #2e9d6d;
+}
+.propeller-wrap--second .propeller-blade {
+  background-color: #27c787;
+}
+.propeller--first {
+  left: -12px;
+}
+.propeller--second {
+  left: 126px;
+}
+.rope {
+  position: absolute;
+  width: 110px;
+  top: 19px;
+  left: 101px;
+  z-index: 1;
+  animation: rope 5s infinite ease-in-out;
+  transform-origin: 0 0;
+  transform: rotate(11deg);
+}
+.pinata {
+  width: 222px;
+  position: relative;
+  z-index: 2;
+  animation: pinata 5s infinite ease-in-out;
+  transform: rotate(5deg) translate3d(-60px, 0, 100px);
+}
+.pinata-rope {
+  position: absolute;
+  top: 86px;
+  left: 87px;
+  width: 38px;
+}
+.ground {
+  position: absolute;
+  left: -300px;
+  right: -300px;
+  bottom: -100px;
+  height: 200px;
+  background-color: #27c787;
+  border-radius: 50%;
+}
+@-moz-keyframes wrap {
+  50% {
+    transform: translateY(10px);
+  }
+}
+@-webkit-keyframes wrap {
+  50% {
+    transform: translateY(10px);
+  }
+}
+@-o-keyframes wrap {
+  50% {
+    transform: translateY(10px);
+  }
+}
+@keyframes wrap {
+  50% {
+    transform: translateY(10px);
+  }
+}
+@-moz-keyframes propellers {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@-webkit-keyframes propellers {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@-o-keyframes propellers {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes propellers {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@-moz-keyframes rope {
+  50% {
+    transform: rotate(-6.2deg);
+  }
+}
+@-webkit-keyframes rope {
+  50% {
+    transform: rotate(-6.2deg);
+  }
+}
+@-o-keyframes rope {
+  50% {
+    transform: rotate(-6.2deg);
+  }
+}
+@keyframes rope {
+  50% {
+    transform: rotate(-6.2deg);
+  }
+}
+@-moz-keyframes pinata {
+  50% {
+    transform: rotate(-5deg) translate3d(20px, -5px, 100px);
+  }
+}
+@-webkit-keyframes pinata {
+  50% {
+    transform: rotate(-5deg) translate3d(20px, -5px, 100px);
+  }
+}
+@-o-keyframes pinata {
+  50% {
+    transform: rotate(-5deg) translate3d(20px, -5px, 100px);
+  }
+}
+@keyframes pinata {
+  50% {
+    transform: rotate(-5deg) translate3d(20px, -5px, 100px);
+  }
+}
+
+.wrap {
+  overflow: hidden;
+  padding-bottom: 120px;
+  position: relative;
+}
+
+.pinata-wrap {
+  transition: 1.5s all ease-in-out;
+}
     </style>
   </head>
   <body>
-    <h1 class="title">Tug o&rsquo; War</h1>
-    <p class="team">You&rsquo;re on team <span class="team-name" id="team-name">&hellip;</span></p>
-    <div class="player" id="player">
-    </div>
+    <header class="header">
+      <div class="header-inner">
+        <h1 class="title">Tug o&rsquo; War</h1>
+        <p class="team">You&rsquo;re on <strong class="team-label" id="team-label">Team <span class="team-name" id="team-name">&hellip;</span></strong></p>
+        <div class="player" id="player">
+        </div>
+      </div>
+    </header>
+
     <div class="game" id="game"></div>
-    <div class="rope" id="rope">
+
+    <div class="wrap">
+      <div class="pinata-wrap" id="pinata">
+        <div class="propeller-wrap propeller-wrap--first">
+          <div class="propeller propeller--first">
+            <div class="propeller-blade"></div>
+          </div>
+          <div class="propeller propeller--second">
+            <div class="propeller-blade"></div>
+          </div>
+        </div>
+        <div class="propeller-wrap propeller-wrap--second">
+          <div class="propeller propeller--first">
+            <div class="propeller-blade"></div>
+          </div>
+          <div class="propeller propeller--second">
+            <div class="propeller-blade"></div>
+          </div>
+        </div>
+        <img class="rope" src="rope-02.svg">
+        <div class="pinata"><img src="body.svg"><img class="pinata-rope" src="rope2.svg"></div>
+      </div>
+      <div class="ground"></div>
+    </div>
+
+    <div class="string" id="string">
       <div class="side-a side" id="side-a">
         <span class="score-a score" id="score-a">0</span>
       </div>
@@ -135,16 +440,7 @@
         <span class="score-bside score" id="score-b">0</span>
       </div>
     </div>
-    <!--
-    <div class="team-a" id="team-a">
-      <h2>Team A</h2>
-      <div class="score-a score" id="score-a">0</div>
-    </div>
-    <div class="team-b" id="team-b">
-      <h2>Team B</h2>
-      <div class="score-b score" id="score-b">0</div>
-    </div>
-    -->
+
     <a class="reset" id="reset" href="#reset">Start over</a>
     <script src="/client.js"></script>
   </body>
