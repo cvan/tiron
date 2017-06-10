@@ -1,7 +1,50 @@
 (function () {
+  var logsEl = document.querySelector('#logs');
+
+  function appendMsg (msg, type) {
+    var p = document.createElement('p');
+    p.setAttribute('data-log-type', type || 'log');
+    p.textContent = msg;
+    logsEl.appendChild(p);
+    logsEl.scrollIntoView();
+  }
+
+  function appendLog (msg) {
+    appendMsg(msg, 'log');
+  }
+
+  function appendError (msg) {
+    appendMsg(msg, 'error');
+  }
+
   window.onerror = function (err) {
-    document.body.innerHTML += err;
+    appendError(msg);
   };
+
+  var tug = function () {
+    appendLog('tug!');
+  };
+
+  var debug = window.location.search.indexOf('?debug') > -1 ||
+              window.location.search.indexOf('&debug') > -1;
+  var touch = 'ontouchstart' in window || (
+    window.location.search.indexOf('?touch') > -1 ||
+    window.location.search.indexOf('&touch') > -1);
+  if (debug) {
+    document.documentElement.setAttribute('data-debug', 'true');
+  }
+  if (touch) {
+    document.documentElement.setAttribute('data-touch', 'true');
+    document.addEventListener('touchstart', function (evt) {
+      evt.preventDefault();
+      tug();
+    });
+  } else {
+    document.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      tug();
+    });
+  }
 
   var WS_PROTOCOL = 'ws:';
   var WS_HOST = window.location.hostname;
@@ -14,7 +57,10 @@
     'Cristóbal',
     'Alonzo',
     'Miguel',
-    'Joaquín'
+    'Joaquín',
+    'Lupé',
+    'Rosa',
+
   ];
 
   // Source: https://stackoverflow.com/a/2380070
@@ -115,7 +161,7 @@
   conn.onmessage = function (msg) {
     var data = JSON.parse(msg.data);
 
-    console.log('msg received', data);
+    // console.log('msg received', data);
 
     var type = data.type;
 
@@ -128,9 +174,10 @@
     } else if (type === 'scores') {
       scores = data.scores;
 
-      console.log(Math.abs(scores.B - scores.A));
+      // console.log('diff', Math.abs(scores.B - scores.A));
       // pinataEl.style.cssText += 'margin-right: calc(50% - 160px)';
-      pinataEl.style.cssText += 'margin-right: calc(' + (50 + Math.abs(scores.B - scores.A) * 2) + '% - 160px)';
+      // pinataEl.style.cssText += 'margin-right: calc(' + (50 + Math.abs(scores.B - scores.A) * 2) + '% - 160px)';
+      pinataEl.style.cssText += 'margin-right: calc(' + (50 + (scores.B - scores.A) * 2) + '% - 160px)';
 
       teamASideEl.setAttribute('style', 'flex: ' + data.scores.A);
       teamAScoreEl.setAttribute('data-score', data.scores.A);
@@ -170,10 +217,10 @@
     if (!gameOver) {
       conn.send(JSON.stringify({type: 'rematch'}));
     }
-    console.log('open');
-    window.addEventListener('click', function () {
+    // console.log('open');
+    tug = function () {
       conn.send(JSON.stringify({type: 'tug'}));
-    });
+    };
   };
 
   var clicksGG = 0;
@@ -183,14 +230,14 @@
       return;
     }
 
-    console.log(clicksGG);
-
     if (gameOver) {
       if (clicksGG >= 1) {
         clicksGG = 0;
         rematch();
-        evt.preventDefault();
-        evt.stopPropagation();
+        if (evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+        }
         return;
       }
       clicksGG++;
@@ -199,8 +246,10 @@
     clicksGG = 0;
 
     if (evt.target.closest('a[href$="#reset"]')) {
-      evt.preventDefault();
-      evt.stopPropagation();
+      if (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
       clearSavedData();
       window.location.href = window.location.origin + window.location.pathname;
     }

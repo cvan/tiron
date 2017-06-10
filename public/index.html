@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <title>Tug o' War</title>
     <style>
       * {
@@ -17,6 +17,7 @@
       }
 
       html {
+        -webkit-text-size-adjust: none;
         background-color: #27c787;
         font-size: 14px;
         -webkit-touch-callout: none;  /* iOS Safari */
@@ -88,12 +89,6 @@
         visibility: hidden;
       }
 
-      .string {
-        background: red;
-        display: flex;
-        margin: 3rem 0;
-      }
-
       .side {
         flex: 1;
         padding: 1rem 1.5rem;
@@ -140,11 +135,33 @@
         text-align: right;
       }
 
-      .string {
+      .logs:empty {
         display: none;
       }
 
-      html[data-debug="true"] .string {
+      .logs {
+        background: rgba(255,255,255,.5);
+        color: rgba(255,255,255,.5);
+        font-family: Consolas, Courier New, Courier, monospace;
+        position: fixed;
+        height: 25vh;
+        overflow: auto;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .logs [data-log-type="error"] {
+        background: rgba(255,0,0,.5);
+        color: rgba(255,0,0,.5);
+      }
+
+      .scores {
+        background: rgba(255,255,255,.5);
+        display: none;
+        margin: 3rem 0;
+      }
+
+      [data-debug="true"] .scores {
         display: block;
       }
 
@@ -395,6 +412,14 @@
 .pinata-wrap {
   transition: 1.5s all ease-in-out;
 }
+
+[data-debug="true"] .wrap {
+  background-color: cyan;
+}
+[data-debug="true"] .pinata-wrap {
+  background-color: orange;
+}
+
     </style>
   </head>
   <body>
@@ -434,7 +459,7 @@
       <div class="ground"></div>
     </div>
 
-    <div class="string" id="string">
+    <div class="scores" id="scores">
       <div class="side-a side" id="side-a">
         <span class="score-a score" id="score-a">0</span>
       </div>
@@ -442,6 +467,8 @@
         <span class="score-bside score" id="score-b">0</span>
       </div>
     </div>
+
+    <div class="logs" id="logs"></div>
 
     <a class="reset" id="reset" href="#reset">Start over</a>
     <script src="/client.js"></script>
